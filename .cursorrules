@@ -1,0 +1,41 @@
+# Image Carousel Extension - Cursor Rules
+
+## Version Management
+
+- Use semantic versioning: x.y.z (major.minor.patch)
+- **You** (AI assistant) should automatically bump the **patch version (z)** when adding new features or bug fixes
+- **User** will handle bumping the **minor version (y)** themselves
+- Use `pnpm bump:patch` to increment patch version
+- Version is synced between `manifest.json` and `package.json`
+- **After bumping patch version:**
+  - Update `changelog.md` with new features/fixes for that version
+  - Commit the version bump and changelog update with message: "Bump version to x.y.z"
+
+## Code Style
+
+- Use consistent formatting: prefer double quotes for strings
+- Follow existing code patterns and conventions
+- Keep functions focused and modular
+
+## Project Structure
+
+- `background/service_worker.js` - Extension service worker (MV3)
+- `content/carousel.js` - Main carousel logic and UI
+- `content/carousel.css` - Carousel styling
+- `options/` - Options page (HTML, JS, CSS)
+- `tools/bump-version.js` - Version bumping utility
+
+## Chrome Extension Guidelines
+
+- This is a Manifest V3 extension
+- Use `chrome.storage.sync` for user settings
+- Content scripts run at `document_idle`
+- Always check for API availability before using (e.g., `chrome.scripting`)
+- Handle lazy-loaded images proactively
+- Maintain accessibility (aria-labels, keyboard navigation)
+
+## Testing
+
+- Always test after making changes
+- Reload extension at chrome://extensions after code changes
+- Test on pages with various image types (lazy-loaded, srcset, etc.)
