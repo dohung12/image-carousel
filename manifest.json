@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Image Carousel",
+  "version": "0.2.0",
+  "description": "Turn images on a page into a fullscreen carousel.",
+  "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
+  "action": {
+    "default_title": "Open Image Carousel"
+  },
+  "background": {
+    "service_worker": "background/service_worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/carousel.js"],
+      "css": ["content/carousel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options/options.html",
+  "minimum_chrome_version": "105"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "image-carousel-extension",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Chrome MV3 extension that turns page images into a carousel",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "bump:patch": "node tools/bump-version.js patch",
+    "bump:minor": "node tools/bump-version.js minor",
+    "bump:major": "node tools/bump-version.js major"
+  }
+}
