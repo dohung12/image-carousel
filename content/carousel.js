@@ -496,7 +496,7 @@
     button.textContent = state.autoplay ? "⏸" : "▶";
     button.setAttribute(
       "title",
-      state.autoplay ? "Pause autoplay (Space)" : "Play autoplay (Space)"
+      state.autoplay ? "Pause autoplay (Space/P)" : "Play autoplay (Space/P)"
     );
     if (state.autoplay) startAutoplay();
     else stopAutoplay();
@@ -618,7 +618,7 @@
     btnPlayPause.setAttribute("aria-label", "Toggle autoplay");
     btnPlayPause.setAttribute(
       "title",
-      settings.autoplay ? "Pause autoplay (Space)" : "Play autoplay (Space)"
+      settings.autoplay ? "Pause autoplay (Space/P)" : "Play autoplay (Space/P)"
     );
     btnPlayPause.textContent = settings.autoplay ? "⏸" : "▶";
 
@@ -626,7 +626,7 @@
     btnRotate.className = "carousel-button";
     btnRotate.type = "button";
     btnRotate.setAttribute("aria-label", "Rotate current image 90 degrees");
-    btnRotate.setAttribute("title", "Rotate image 90°");
+    btnRotate.setAttribute("title", "Rotate image 90° (R)");
     btnRotate.textContent = "↻";
 
     const selectInterval = document.createElement("select");
@@ -654,7 +654,9 @@
     btnTwoUp.setAttribute("aria-label", "Toggle two-up view");
     btnTwoUp.setAttribute(
       "title",
-      state.twoUp ? "Switch to single view (2×)" : "Switch to two-up view (1×)"
+      state.twoUp
+        ? "Switch to single view (2×) (T)"
+        : "Switch to two-up view (1×) (T)"
     );
     btnTwoUp.textContent = state.twoUp ? "2×" : "1×";
 
@@ -671,6 +673,13 @@
       selectPreviewCount.appendChild(option);
     });
 
+    const btnInfo = document.createElement("button");
+    btnInfo.className = "carousel-button";
+    btnInfo.type = "button";
+    btnInfo.setAttribute("aria-label", "Show keyboard shortcuts");
+    btnInfo.setAttribute("title", "Show keyboard shortcuts (?)");
+    btnInfo.textContent = "ℹ";
+
     const btnClose = document.createElement("button");
     btnClose.className = "carousel-button";
     btnClose.type = "button";
@@ -683,6 +692,7 @@
     controls.appendChild(selectInterval);
     controls.appendChild(btnTwoUp);
     controls.appendChild(selectPreviewCount);
+    controls.appendChild(btnInfo);
     controls.appendChild(btnClose);
 
     root.appendChild(topbar);
@@ -701,12 +711,93 @@
     // Initial render
     renderToIndex(0);
 
+    // Hotkey modal
+    function createHotkeyModal() {
+      const modal = document.createElement("div");
+      modal.className = "carousel-hotkey-modal";
+      modal.setAttribute("role", "dialog");
+      modal.setAttribute("aria-modal", "true");
+      modal.setAttribute("aria-label", "Keyboard shortcuts");
+
+      const modalContent = document.createElement("div");
+      modalContent.className = "carousel-hotkey-modal-content";
+
+      const modalHeader = document.createElement("div");
+      modalHeader.className = "carousel-hotkey-modal-header";
+      modalHeader.textContent = "Keyboard Shortcuts";
+
+      const modalBody = document.createElement("div");
+      modalBody.className = "carousel-hotkey-modal-body";
+
+      const shortcuts = [
+        { key: "← / →", desc: "Previous / Next image" },
+        { key: "Space", desc: "Toggle autoplay" },
+        { key: "P", desc: "Play / Pause" },
+        { key: "R", desc: "Rotate image 90°" },
+        { key: "T", desc: "Toggle two-up view" },
+        { key: "Wheel", desc: "Navigate images" },
+        { key: "Esc", desc: "Close carousel" },
+        { key: "?", desc: "Show this help" },
+      ];
+
+      shortcuts.forEach(({ key, desc }) => {
+        const row = document.createElement("div");
+        row.className = "carousel-hotkey-row";
+
+        const keyCell = document.createElement("div");
+        keyCell.className = "carousel-hotkey-key";
+        keyCell.textContent = key;
+
+        const descCell = document.createElement("div");
+        descCell.className = "carousel-hotkey-desc";
+        descCell.textContent = desc;
+
+        row.appendChild(keyCell);
+        row.appendChild(descCell);
+        modalBody.appendChild(row);
+      });
+
+      const modalClose = document.createElement("button");
+      modalClose.className = "carousel-button";
+      modalClose.textContent = "Close";
+      modalClose.addEventListener("click", () => modal.remove());
+
+      modalContent.appendChild(modalHeader);
+      modalContent.appendChild(modalBody);
+      modalContent.appendChild(modalClose);
+      modal.appendChild(modalContent);
+
+      overlay.appendChild(modal);
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.remove();
+      });
+
+      return modal;
+    }
+
+    let hotkeyModal = null;
+    function toggleHotkeyModal() {
+      if (hotkeyModal && hotkeyModal.parentElement) {
+        hotkeyModal.remove();
+        hotkeyModal = null;
+      } else {
+        hotkeyModal = createHotkeyModal();
+      }
+    }
+
     // Handlers
     function onKey(e) {
       trapFocus(e);
       if (e.key === "Escape") {
-        e.preventDefault();
-        removeOverlay();
+        if (hotkeyModal && hotkeyModal.parentElement) {
+          e.preventDefault();
+          hotkeyModal.remove();
+          hotkeyModal = null;
+        } else {
+          e.preventDefault();
+          removeOverlay();
+        }
       } else if (e.key === "ArrowRight") {
         e.preventDefault();
         renderToIndex(state.index + (state.twoUp ? 2 : 1));
@@ -715,9 +806,48 @@
         e.preventDefault();
         renderToIndex(state.index - (state.twoUp ? 2 : 1));
         if (state.autoplay) startAutoplay();
-      } else if (e.code === "Space") {
+      } else if (e.code === "Space" || e.key === "p" || e.key === "P") {
         e.preventDefault();
         toggleAutoplay(btnPlayPause);
+      } else if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        const current = state.rotationsByIndex[state.index] || 0;
+        const next = (current + 90) % 360;
+        state.rotationsByIndex[state.index] = next;
+        const imgEl = document.querySelector(
+          "#image-carousel-overlay .carousel-image"
+        );
+        if (imgEl) imgEl.style.transform = `rotate(${next}deg)`;
+      } else if (e.key === "t" || e.key === "T") {
+        e.preventDefault();
+        state.twoUp = !state.twoUp;
+        btnTwoUp.textContent = state.twoUp ? "2×" : "1×";
+        btnTwoUp.setAttribute(
+          "title",
+          state.twoUp
+            ? "Switch to single view (2×)"
+            : "Switch to two-up view (1×)"
+        );
+        const imgEl2 = document.querySelector(
+          "#image-carousel-overlay .carousel-image.secondary"
+        );
+        const stageEl = document.querySelector(
+          "#image-carousel-overlay .carousel-stage"
+        );
+        if (stageEl) {
+          stageEl.className = state.twoUp
+            ? "carousel-stage two-up"
+            : "carousel-stage";
+        }
+        if (imgEl2) {
+          if (state.twoUp) imgEl2.removeAttribute("hidden");
+          else imgEl2.setAttribute("hidden", "");
+        }
+        renderToIndex(state.index);
+        if (state.autoplay) startAutoplay();
+      } else if (e.key === "?" || e.key === "/") {
+        e.preventDefault();
+        toggleHotkeyModal();
       }
     }
 
@@ -768,8 +898,8 @@
       btnTwoUp.setAttribute(
         "title",
         state.twoUp
-          ? "Switch to single view (2×)"
-          : "Switch to two-up view (1×)"
+          ? "Switch to single view (2×) (T)"
+          : "Switch to two-up view (1×) (T)"
       );
       // Show/hide secondary image accordingly and re-render counters/rotation
       const imgEl2 = document.querySelector(
@@ -796,6 +926,7 @@
       chrome.storage.sync.set({ previewCount: newCount });
       renderPreviewThumbnails();
     });
+    btnInfo.addEventListener("click", toggleHotkeyModal);
     btnClose.addEventListener("click", removeOverlay);
 
     overlay.addEventListener("click", (e) => {
@@ -831,7 +962,7 @@
     btnNext.focus();
 
     // Autoplay
-    startAutoplay();
+    if (state.autoplay) startAutoplay();
   }
 
   // Message listener
