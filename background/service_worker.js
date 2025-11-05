@@ -1,5 +1,5 @@
 const DEFAULTS = {
-  showContextMenu: false,
+  showContextMenu: true,
 };
 
 async function getSettings() {

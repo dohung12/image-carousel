@@ -1,8 +1,18 @@
-# Changelog
+# Change log
+
+## [0.2.3] - 2025-01-XX
+
+### Added
+- Context menu entry "Open Image Carousel" enabled by default
+- Option remains configurable in Options page
+
+### Improved
+- More robust context menu initialization on install and startup
 
 ## [0.2.2] - 2025-01-XX
 
 ### Added
+
 - Keyboard shortcuts for all controls:
   - `P` or `Space`: Toggle play/pause
   - `R`: Rotate image 90°
@@ -12,11 +22,13 @@
 - Hotkey information modal with all available keyboard shortcuts
 
 ### Improved
+
 - Buttons made wider (1rem additional padding) for better usability
 - Interval selector made slightly larger with increased padding and font size
-- Fixed control buttons clickability issue (first 3 buttons were unclickable due to overlapping caption)
+- Fixed control buttons click handling (first 3 buttons were blocked by overlapping caption)
 
 ### Fixed
+
 - Autoplay no longer starts automatically on carousel open - respects user's autoplay setting
 
 ## [0.2.1] - 2025-01-XX

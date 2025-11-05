@@ -6,7 +6,7 @@ const DEFAULTS = {
   loop: true,
   rotateOnClick: false,
   twoUp: false,
-  showContextMenu: false,
+  showContextMenu: true,
 };
 
 function getEl(id) {
