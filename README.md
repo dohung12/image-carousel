@@ -65,4 +65,3 @@ Each release must update `changelog.md` and commit with `Bump version to x.y.z`.
 ## License
 
 MIT © contributors.
-
