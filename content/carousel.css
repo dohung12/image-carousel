@@ -224,7 +224,14 @@
   padding: 12px;
   margin: 16px 0;
   overflow-x: auto;
+  overflow-y: hidden;
   max-width: 100%;
+  /* Hide scrollbars across browsers while preserving scrollability */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.carousel-preview-row::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .carousel-preview-couple {

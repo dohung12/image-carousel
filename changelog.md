@@ -6,6 +6,12 @@
 
 - Prevent duplicate context menu creation error (`image-carousel-open`) by making menu setup idempotent
 
+## [0.2.6] - 2025-11-11
+
+### Fixed
+
+- Hide scrollbar at the end of the preview images bar while keeping it scrollable
+
 ## [0.2.4] - 2025-11-11
 
 ### Fixed
