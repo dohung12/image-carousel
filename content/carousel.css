@@ -69,6 +69,13 @@
   white-space: nowrap;
 }
 
+.carousel-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .carousel-controls {
   position: relative;
   display: flex;
@@ -199,7 +206,6 @@
 }
 
 .carousel-counter {
-  margin-left: auto;
   opacity: 0.9;
 }
 

@@ -12,6 +12,12 @@
 
 - Hide scrollbar at the end of the preview images bar while keeping it scrollable
 
+## [0.2.7] - 2025-11-11
+
+### Added
+
+- Close button in the top bar for quick dismissal of the carousel overlay
+
 ## [0.2.4] - 2025-11-11
 
 ### Fixed

@@ -578,8 +578,18 @@
     title.title = document.title || "Image Carousel";
     const counter = document.createElement("div");
     counter.className = "carousel-counter";
+    const topClose = document.createElement("button");
+    topClose.className = "carousel-button carousel-topbar-close";
+    topClose.type = "button";
+    topClose.setAttribute("aria-label", "Close carousel");
+    topClose.setAttribute("title", "Close carousel (Esc)");
+    topClose.textContent = "✕";
+    const topbarRight = document.createElement("div");
+    topbarRight.className = "carousel-topbar-right";
+    topbarRight.appendChild(counter);
+    topbarRight.appendChild(topClose);
     topbar.appendChild(title);
-    topbar.appendChild(counter);
+    topbar.appendChild(topbarRight);
 
     const stage = document.createElement("div");
     stage.className = state.twoUp ? "carousel-stage two-up" : "carousel-stage";
@@ -938,6 +948,7 @@
     });
     btnInfo.addEventListener("click", toggleHotkeyModal);
     btnClose.addEventListener("click", removeOverlay);
+    topClose.addEventListener("click", removeOverlay);
 
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) removeOverlay();
