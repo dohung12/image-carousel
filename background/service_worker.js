@@ -13,15 +13,40 @@ const MENU_ID = "image-carousel-open";
 async function ensureContextMenu() {
   const { showContextMenu } = await getSettings();
   if (!chrome.contextMenus) return;
-  await new Promise((resolve) =>
-    chrome.contextMenus.removeAll(() => resolve())
-  );
   if (showContextMenu) {
-    chrome.contextMenus.create({
-      id: MENU_ID,
-      title: "Open Image Carousel",
-      contexts: ["page", "image"],
+    // Try to update if it exists; if not, create it. Avoid duplicate-id errors.
+    const updated = await new Promise((resolve) => {
+      try {
+        chrome.contextMenus.update(
+          MENU_ID,
+          { title: "Open Image Carousel", contexts: ["page", "image"] },
+          () => {
+            if (chrome.runtime.lastError) return resolve(false);
+            resolve(true);
+          }
+        );
+      } catch (_) {
+        resolve(false);
+      }
     });
+    if (!updated) {
+      try {
+        chrome.contextMenus.create({
+          id: MENU_ID,
+          title: "Open Image Carousel",
+          contexts: ["page", "image"],
+        });
+      } catch (_) {
+        // Ignore duplicate errors if any race condition occurs
+      }
+    }
+  } else {
+    // Remove the single menu if present (ignore errors if it does not exist)
+    try {
+      await new Promise((resolve) =>
+        chrome.contextMenus.remove(MENU_ID, () => resolve())
+      );
+    } catch (_) {}
   }
 }
 

@@ -1,5 +1,11 @@
 # Change log
 
+## [0.2.5] - 2025-11-11
+
+### Fixed
+
+- Prevent duplicate context menu creation error (`image-carousel-open`) by making menu setup idempotent
+
 ## [0.2.4] - 2025-11-11
 
 ### Fixed
