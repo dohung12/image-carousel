@@ -828,7 +828,7 @@
       } else if (e.code === "Space" || e.key === "p" || e.key === "P") {
         e.preventDefault();
         toggleAutoplay(btnPlayPause);
-      } else if (e.key === "r" || e.key === "R") {
+      } else if ((e.key === "r" || e.key === "R") && !e.metaKey && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
         const current = state.rotationsByIndex[state.index] || 0;
         const next = (current + 90) % 360;

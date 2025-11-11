@@ -24,6 +24,12 @@
 
 - Two-up mode now enforces a strict 1/2 split: each image gets 50% width and consistent height to avoid uneven layouts
 
+## [0.2.9] - 2025-11-11
+
+### Fixed
+
+- Preserve browser reload shortcuts: `Cmd+R`/`Ctrl+R` no longer triggers Rotate; `R` rotate only when no modifier keys are pressed
+
 ## [0.2.4] - 2025-11-11
 
 ### Fixed
