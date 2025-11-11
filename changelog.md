@@ -1,12 +1,23 @@
 # Change log
 
+## [0.2.4] - 2025-11-11
+
+### Fixed
+
+- Prevent page scroll when navigating images with mouse wheel or touch in carousel mode
+  - Added capture-phase `wheel`/`touchmove` blockers with `passive: false`
+  - Stopped event propagation within overlay wheel handler
+  - Applied `overscroll-behavior: contain` and `touch-action: none` on overlay
+
 ## [0.2.3] - 2025-01-XX
 
 ### Added
+
 - Context menu entry "Open Image Carousel" enabled by default
 - Option remains configurable in Options page
 
 ### Improved
+
 - More robust context menu initialization on install and startup
 
 ## [0.2.2] - 2025-01-XX

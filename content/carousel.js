@@ -539,11 +539,20 @@
     const images = findImages(settings.minWidth, settings.minHeight);
     state.images = images;
     state.autoplay = !!settings.autoplay;
-    state.intervalMs = Number(settings.intervalMs) || DEFAULTS.intervalMs;
+    // Check localStorage for saved interval and preview count
+    const savedInterval = localStorage.getItem("imageCarousel_intervalMs");
+    const savedPreviewCount = localStorage.getItem(
+      "imageCarousel_previewCount"
+    );
+    state.intervalMs = savedInterval
+      ? Number(savedInterval)
+      : Number(settings.intervalMs) || DEFAULTS.intervalMs;
     state.loop = !!settings.loop;
     state.rotateOnClick = !!settings.rotateOnClick;
     state.twoUp = !!settings.twoUp;
-    state.previewCount = Number(settings.previewCount) || DEFAULTS.previewCount;
+    state.previewCount = savedPreviewCount
+      ? Number(savedPreviewCount)
+      : Number(settings.previewCount) || DEFAULTS.previewCount;
 
     if (!images || images.length === 0) {
       isOpen = false;
@@ -860,6 +869,7 @@
       const dy = e.deltaY;
       if (Math.abs(dy) < 2) return;
       e.preventDefault();
+      e.stopPropagation();
       lastWheelAt = now;
       const step = state.twoUp ? 2 : 1;
       if (dy > 0) {
@@ -880,7 +890,7 @@
     selectInterval.addEventListener("change", (e) => {
       const newInterval = parseInt(e.target.value, 10);
       state.intervalMs = newInterval;
-      chrome.storage.sync.set({ intervalMs: newInterval });
+      localStorage.setItem("imageCarousel_intervalMs", String(newInterval));
       if (state.autoplay) startAutoplay();
     });
     btnRotate.addEventListener("click", () => {
@@ -923,7 +933,7 @@
     selectPreviewCount.addEventListener("change", (e) => {
       const newCount = parseInt(e.target.value, 10);
       state.previewCount = newCount;
-      chrome.storage.sync.set({ previewCount: newCount });
+      localStorage.setItem("imageCarousel_previewCount", String(newCount));
       renderPreviewThumbnails();
     });
     btnInfo.addEventListener("click", toggleHotkeyModal);
@@ -935,9 +945,31 @@
 
     document.addEventListener("keydown", onKey, true);
     overlay.addEventListener("wheel", onWheel, { passive: false });
+    // Swallow wheel/touch events at the document level while open to avoid page scroll
+    const swallowWheelOrTouch = (e) => {
+      // Only act while overlay exists
+      if (!document.getElementById("image-carousel-overlay")) return;
+      e.preventDefault();
+    };
+    document.addEventListener("wheel", swallowWheelOrTouch, {
+      capture: true,
+      passive: false,
+    });
+    document.addEventListener("touchmove", swallowWheelOrTouch, {
+      capture: true,
+      passive: false,
+    });
     overlay.addEventListener("remove", () => {
       document.removeEventListener("keydown", onKey, true);
       overlay.removeEventListener("wheel", onWheel, { passive: false });
+      document.removeEventListener("wheel", swallowWheelOrTouch, {
+        capture: true,
+        passive: false,
+      });
+      document.removeEventListener("touchmove", swallowWheelOrTouch, {
+        capture: true,
+        passive: false,
+      });
     });
 
     // Rotate on click (optional)
