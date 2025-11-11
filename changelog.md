@@ -18,6 +18,12 @@
 
 - Close button in the top bar for quick dismissal of the carousel overlay
 
+## [0.2.8] - 2025-11-11
+
+### Fixed
+
+- Two-up mode now enforces a strict 1/2 split: each image gets 50% width and consistent height to avoid uneven layouts
+
 ## [0.2.4] - 2025-11-11
 
 ### Fixed

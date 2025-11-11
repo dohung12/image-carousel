@@ -33,6 +33,7 @@
 
 .carousel-stage.two-up {
   gap: 0;
+  align-items: stretch;
 }
 
 .carousel-image {
@@ -42,10 +43,14 @@
   transition: opacity 160ms ease;
 }
 
-/* Two-up mode tweaks */
-#image-carousel-overlay.two-up .carousel-image {
-  max-width: 46vw;
+/* Two-up mode tweaks - enforce half/half layout with consistent height */
+.carousel-stage.two-up .carousel-image {
+  flex: 0 0 50%;
+  width: 50%;
+  max-width: 50%;
+  height: 80vh;
   max-height: 80vh;
+  object-fit: contain;
 }
 
 .carousel-topbar {
