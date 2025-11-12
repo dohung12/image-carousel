@@ -1,22 +1,16 @@
 # Change log
 
-## [0.2.5] - 2025-11-11
+## [0.2.10] - 2025-11-11
+
+### Improved
+
+- Two-up mode: images are now positioned directly adjacent to each other with no spacing (removed all gaps, margins, and padding)
+
+## [0.2.9] - 2025-11-11
 
 ### Fixed
 
-- Prevent duplicate context menu creation error (`image-carousel-open`) by making menu setup idempotent
-
-## [0.2.6] - 2025-11-11
-
-### Fixed
-
-- Hide scrollbar at the end of the preview images bar while keeping it scrollable
-
-## [0.2.7] - 2025-11-11
-
-### Added
-
-- Close button in the top bar for quick dismissal of the carousel overlay
+- Preserve browser reload shortcuts: `Cmd+R`/`Ctrl+R` no longer triggers Rotate; `R` rotate only when no modifier keys are pressed
 
 ## [0.2.8] - 2025-11-11
 
@@ -24,11 +18,23 @@
 
 - Two-up mode now enforces a strict 1/2 split: each image gets 50% width and consistent height to avoid uneven layouts
 
-## [0.2.9] - 2025-11-11
+## [0.2.7] - 2025-11-11
+
+### Added
+
+- Close button in the top bar for quick dismissal of the carousel overlay
+
+## [0.2.6] - 2025-11-11
 
 ### Fixed
 
-- Preserve browser reload shortcuts: `Cmd+R`/`Ctrl+R` no longer triggers Rotate; `R` rotate only when no modifier keys are pressed
+- Hide scrollbar at the end of the preview images bar while keeping it scrollable
+
+## [0.2.5] - 2025-11-11
+
+### Fixed
+
+- Prevent duplicate context menu creation error (`image-carousel-open`) by making menu setup idempotent
 
 ## [0.2.4] - 2025-11-11
 
